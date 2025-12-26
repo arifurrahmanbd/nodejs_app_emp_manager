@@ -2,9 +2,14 @@ require("dotenv").config();
 const oracledb = require("oracledb");
 
 
-// Thick mode
+// Thick mode windows
+//oracledb.initOracleClient({
+  //libDir: "C:\\oracle\\instantclient_19_29"
+//});
+
+// Thick mode linux
 oracledb.initOracleClient({
-  libDir: "C:\\oracle\\instantclient_19_29"
+  libDir: process.env.OCI_LIB_DIR || '/opt/oracle/instantclient_19_29'
 });
 
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;

@@ -4,6 +4,9 @@ const { addEmployee } = require("./employeeService");
 const app = express();
 app.use(express.json());
 
+const PORT = process.env.PORT || 3000;
+
+
 app.post("/employee", async (req, res) => {
   const { emp_id, emp_name } = req.body;
 
@@ -15,9 +18,14 @@ app.post("/employee", async (req, res) => {
     const result = await addEmployee(emp_id, emp_name);
     res.json({ status: result });
   } catch (err) {
-    console.error(err);
+    console.error(err.stack);
     res.status(500).json({ error: err.message });
   }
 });
 
-app.listen(3000, () => console.log("🚀 Server running on port 3000"));
+app.get("/", (req, res) => {
+  res.send("hello world");
+});
+
+
+app.listen(PORT, () => console.log(`?? Server running on port ${PORT}`));

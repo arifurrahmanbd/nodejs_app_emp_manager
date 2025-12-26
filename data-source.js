@@ -3,11 +3,15 @@ const { DataSource } = require("typeorm");
 const oracledb = require("oracledb");
 
 
-// Thick mode
-oracledb.initOracleClient({
-  libDir: "C:\\oracle\\instantclient_19_29"
-});
+// Thick mode windows
+//oracledb.initOracleClient({
+ // libDir: "C:\\oracle\\instantclient_19_29"
+//});
 
+// Thick mode linux
+oracledb.initOracleClient({
+  libDir: process.env.OCI_LIB_DIR || '/opt/oracle/instantclient_19_29'
+});
 const AppDataSource = new DataSource({
   type: "oracle",
   username: process.env.DB_USER,
