@@ -1,16 +1,19 @@
-require("dotenv").config();
-const oracledb = require("oracledb");
 
+require('dotenv').config();
+const path = require('path');
+const os = require('os');
+const oracledb = require('oracledb');
 
-// Thick mode windows
-//oracledb.initOracleClient({
-  //libDir: "C:\\oracle\\instantclient_19_29"
-//});
+// Auto-detect environment
+const isLinux = os.platform() === 'linux';
+console.log("Current Environment:", isLinux ? "linux" : "windows");
 
-// Thick mode linux
-oracledb.initOracleClient({
-  libDir: process.env.OCI_LIB_DIR || '/opt/oracle/instantclient_19_29'
-});
+try {
+  oracledb.initOracleClient({ libDir: isLinux ? process.env.ORACLE_CLIENT_LIB_DIR_LINUX : process.env.ORACLE_CLIENT_LIB_DIR_WINDOWS });
+  console.log("Oracle client initialized.");
+} catch (err) {
+  console.error("Error initializing Oracle client:", err);
+}
 
 oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
 

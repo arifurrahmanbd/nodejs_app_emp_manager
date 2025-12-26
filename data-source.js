@@ -1,27 +1,33 @@
-require("dotenv").config();
+require('dotenv').config();
 const { DataSource } = require("typeorm");
 const oracledb = require("oracledb");
+const os = require("os");
+const path = require("path");
 
+// Detect OS
+const isLinux = os.platform() === "linux";
 
-// Thick mode windows
-//oracledb.initOracleClient({
- // libDir: "C:\\oracle\\instantclient_19_29"
-//});
+console.log("Current Environment:", isLinux ? "linux" : "windows");
 
-// Thick mode linux
-oracledb.initOracleClient({
-  libDir: process.env.OCI_LIB_DIR || '/opt/oracle/instantclient_19_29'
-});
+try {
+  oracledb.initOracleClient({ libDir: isLinux ? process.env.ORACLE_CLIENT_LIB_DIR_LINUX : process.env.ORACLE_CLIENT_LIB_DIR_WINDOWS });
+  console.log("Oracle client initialized.");
+} catch (err) {
+  console.error("Error initializing Oracle client:", err);
+}
+// Auto-commit is recommended for DML if you want changes persisted immediately
+oracledb.outFormat = oracledb.OUT_FORMAT_OBJECT;
+
 const AppDataSource = new DataSource({
   type: "oracle",
   username: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
-  connectString: process.env.DB_CONNECT, // use host:port/serviceName
-  synchronize: true,
+  connectString: process.env.DB_CONNECT, // host:port/serviceName
+  synchronize: true, // auto-create tables from entities
   logging: false,
-  entities: [__dirname + "/entity/*.js"],
+  entities: [path.join(__dirname, "entity/*.js")],
   options: {
-    autoCommit: true, // <--- this ensures each query commits automatically
+    autoCommit: true, // ensures inserts/updates are committed automatically
   },
 });
 

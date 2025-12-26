@@ -1,6 +1,14 @@
 {
   "compilerOptions": {
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true
-  }
+    "target": "ES2020",                    // modern JS target
+    "module": "commonjs",                  // Node.js
+    "outDir": "./dist",                     // compiled files
+    "rootDir": "./src",                     // your source code
+    "strict": true,                         // optional but recommended
+    "esModuleInterop": true,                // allows import syntax
+    "experimentalDecorators": true,         // enable decorators for TypeORM
+    "emitDecoratorMetadata": true           // required for TypeORM metadata
+  },
+  "include": ["src/**/*"],                  // include your source folder
+  "exclude": ["node_modules", "dist"]      // exclude build output & node_modules
 }
